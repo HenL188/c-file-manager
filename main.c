@@ -3,26 +3,39 @@
 #include <stdio.h>
 #include <string.h>
 
+#define MAX_CMD 10
+#define MAX_INPUT 100
+#define MAX_PATH 115
+
 int main(void){
-  char input[256];
+  char cmd[MAX_CMD];
+  char arg[MAX_INPUT];
   char *pathstart = "C:/Users/henry/";
-  char path[271];
-  puts("Enter quit or q to exit");
+  char path[MAX_PATH];
+  puts("Enter quit -y or q -y to exit");
   loop:
   while(true){
     printf("%s", "$> ");
-    scanf("%s", input);
-    int size = strlen(input);
-    if (size > 256){
-      puts("Input size is to large");
+    scanf("%s%s", cmd, arg);    
+    int size1 = strlen(cmd);
+    int size2 = strlen(arg);
+    if (size1 > MAX_CMD || size2 > MAX_INPUT){
+      puts("Input size is too large");
       goto loop;
     }
-    if (!strcmp(input, "quit") || !strcmp(input, "q")){
+    if (!strcmp(cmd, "quit") || !strcmp(cmd, "q")){
       exit(0);
     }
-    utils_concat(path, 272, pathstart, input);
+    if (!strcmp(cmd, "cd")){
+      char dst[118];
+      utils_concat(path, MAX_PATH, pathstart, arg);
+      utils_concat(dst, MAX_PATH, "cd ", path);
+      system(dst);
+      puts(dst);
+    }
+    if (!strcmp(cmd, "clear")){
+      system("cls");
+    }
   }
-  int size = strlen(pathstart);
-  utils_puti(size);
   return 0;
 }
