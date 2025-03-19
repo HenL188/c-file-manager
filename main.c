@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
+#include <errno.h>
 
 #define MAX_CMD 10
 #define MAX_INPUT 100
@@ -10,7 +11,7 @@
 int main(void){
   char cmd[MAX_CMD];
   char arg[MAX_INPUT];
-  char *pathstart = "C:/Users/henry/";
+  char *pathstart = "C:\\Users\\henry\\";
   char path[MAX_PATH];
   puts("Enter quit -y or q -y to exit");
   loop:
@@ -23,18 +24,17 @@ int main(void){
       puts("Input size is too large");
       goto loop;
     }
-    if (!strcmp(cmd, "quit") || !strcmp(cmd, "q")){
-      exit(0);
-    }
-    if (!strcmp(cmd, "cd")){
+    if (!strcmp(cmd, "quit") || !strcmp(cmd, "q")) exit(0);
+    if (!strcmp(cmd, "dir")){
       char dst[118];
       utils_concat(path, MAX_PATH, pathstart, arg);
-      utils_concat(dst, MAX_PATH, "cd ", path);
-      system(dst);
-      puts(dst);
+      utils_concat(dst, MAX_PATH, "dir ", path);
+     if (system(dst) != 0 ){
+       puts(strerror(errno));
+     }
     }
     if (!strcmp(cmd, "clear")){
-      system("cls");
+      if (system("cls") != 0 ) puts(strerror(errno)); 
     }
   }
   return 0;
