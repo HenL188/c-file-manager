@@ -8,6 +8,15 @@
 #define MAX_INPUT 100
 #define MAX_PATH 115
 
+/*
+  find, cat, touch, rm, mv
+  find dir, rmdir, mkdir, mv dir, pwd
+*/
+
+void help(){
+  //read from help file
+}
+
 int main(void){
   char cmd[MAX_CMD];
   char arg[MAX_INPUT];
@@ -25,16 +34,20 @@ int main(void){
       goto loop;
     }
     if (!strcmp(cmd, "quit") || !strcmp(cmd, "q")) exit(0);
-    if (!strcmp(cmd, "dir")){
+    if (!strcmp(cmd, "ls")){
       char dst[118];
       utils_concat(path, MAX_PATH, pathstart, arg);
       utils_concat(dst, MAX_PATH, "dir ", path);
-     if (system(dst) != 0 ){
+      if (system(dst) != 0 ){
        puts(strerror(errno));
      }
     }
     if (!strcmp(cmd, "clear")){
       if (system("cls") != 0 ) puts(strerror(errno)); 
+    }
+    if(!strcmp(cmd, "set")){
+      pathstart = arg;
+      printf("Path set to %s\n", pathstart);
     }
   }
   return 0;
