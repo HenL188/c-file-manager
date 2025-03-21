@@ -5,8 +5,7 @@
 #include <errno.h>
 
 #define MAX_CMD 10
-#define MAX_INPUT 100
-#define MAX_PATH 115
+#define MAX_INPUT 115
 
 /*
     mv
@@ -27,7 +26,7 @@ void help(){
   }
 }
 
-void filecmd(char cmd[],char path[], char *pathstart, char arg[]){
+void filecmd(char cmd[], char arg[]){
   if (!strcmp(cmd, "cat")){
     char line[256];
     FILE *file = fopen(arg, "r");
@@ -66,18 +65,33 @@ void filecmd(char cmd[],char path[], char *pathstart, char arg[]){
     else puts("File failed to delete");
   }
   if(!strcmp(cmd, "mv")){
-    
+    char dst [MAX_INPUT];
+    printf("To or New Name: ");
+    scanf("%s",dst);
+    if (strlen(dst) > MAX_INPUT){
+      puts("Input too large");
+    }
+    else{
+      FILE *file = fopen(arg, "r");
+      if (file == NULL){
+        puts("File not found");
+      }
+      else{
+        fclose(file);
+        char move[360];
+        snprintf(move, 360, "%s%s%s%s", "move ", arg, " ", dst);
+        system(move);  
+      }
+      
+    }
+  
   }
 }
 
-void dircmd(char cmd[],char path[], char *pathstart, char arg[]){
+void dircmd(char cmd[],char arg[]){
   if (!strcmp(cmd, "ls")){
       char dst[118];
-      utils_concat(path, MAX_PATH, pathstart, arg);
-      // for(int i = 0; i < 115; i++){
-      //   path[i] = arg[i];
-      // }
-      utils_concat(dst, MAX_PATH, "dir ", path);
+      utils_concat(dst, MAX_INPUT, "dir ", arg);
       if (system(dst) != 0 ) puts(strerror(errno));
     }
 }
@@ -85,8 +99,6 @@ void dircmd(char cmd[],char path[], char *pathstart, char arg[]){
 int main(void){
   char cmd[MAX_CMD];
   char arg[MAX_INPUT];
-  char *pathstart = "C:\\Users\\henry\\";
-  char path[MAX_PATH];
   puts("Enter quit -y or q -y to exit");
   loop:
   while(true){
@@ -105,8 +117,8 @@ int main(void){
     if (!strcmp(cmd, "help")) help();
     
     
-    dircmd(cmd, path,pathstart,arg);
-    filecmd(cmd, path, pathstart, arg);
+    dircmd(cmd, arg);
+    filecmd(cmd, arg);
     
   }
   return 0;
