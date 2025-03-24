@@ -8,8 +8,7 @@
 #define MAX_INPUT 115
 
 /*
-    mv
-  find dir, rmdir, mkdir, mv dir, pwd
+  find dir, rmdir, mkdir, mv dir 
 */
 
 void help(){
@@ -94,6 +93,19 @@ void dircmd(char cmd[],char arg[]){
       utils_concat(dst, MAX_INPUT, "dir ", arg);
       if (system(dst) != 0 ) puts(strerror(errno));
     }
+    
+    if (!strcmp(cmd, "mvdir")){
+      char dst [MAX_INPUT];
+      printf("To or New Name: ");
+      scanf("%s",dst);
+      if (strlen(dst) > MAX_INPUT) puts("Input too large");
+        char move[360];
+        snprintf(move, 360, "%s%s%s%s", "move ", arg, " ", dst);
+        system(move);  
+      }
+    
+    if (!strcmp(cmd, "mkdir")){}
+    if (!strcmp(cmd, "rmdir")){}
 }
 
 int main(void){
@@ -115,7 +127,6 @@ int main(void){
       if (system("cls") != 0 ) puts(strerror(errno)); 
     }
     if (!strcmp(cmd, "help")) help();
-    
     
     dircmd(cmd, arg);
     filecmd(cmd, arg);
