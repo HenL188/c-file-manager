@@ -109,7 +109,11 @@ void dircmd(char cmd[],char arg[]){
       utils_concat(dst, MAX_INPUT, "mkdir ", arg);
       system(dst);
     }
-    if (!strcmp(cmd, "rmdir")){}
+    if (!strcmp(cmd, "rmdir")){
+      char dst[118];
+      utils_concat(dst, MAX_INPUT, "rmdir /S /Q ", arg);
+      system(dst);
+    }
 }
 
 int main(void){
